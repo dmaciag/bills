@@ -1,5 +1,5 @@
 {
-  "name": "bills",
+  "name": "nBills",
   "version": "1.0.0",
   "description": "income and expense application",
   "main": "index.js",
@@ -13,9 +13,9 @@
   "author": "Daniel Maciag",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/dmaciag/bills/issues"
+    "url": "https://github.com/dmaciag/nBills/issues"
   },
-  "homepage": "https://github.com/dmaciag/bills#readme",
+  "homepage": "https://github.com/dmaciag/nBills#readme",
   "dependencies": {
     "babel-preset-react": "^6.5.0",
     "babelify": "^7.2.0",
