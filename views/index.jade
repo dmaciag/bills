@@ -1,0 +1,21 @@
+extends layout
+block content
+    h1= title
+    p Welcome to bills
+
+    // Wrapper
+    #wrapper
+
+        // EXPENSE LIST
+        h2 Expense List
+        #expenseList
+            table.table-bordered.expenses-table
+                thead
+                    th Name
+                    th Type
+                    th Fee
+                    th Day of Month
+                    th Delete?
+                tbody
+        // /EXPENSE LIST
+    // /WRAPPER

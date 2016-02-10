@@ -1,28 +1,32 @@
 var express = require('express');
-var stormpath = require('express-stormpath');
-
+var mongo   = require('mongodb');
+var monk    = require('monk');
+var db      = monk('localhost:27017/bills');
+var path    = require('path');
 var app = express();
 
-app.set('views', './views');
-app.set('view engine', 'html');
-app.engine('html', require('ejs').renderFile);
+var expenses = require('./routes/expenses');
 
-app.use(stormpath.init(app, {
-  website: true,
-  expand: {
-    customData: true
-  }
-}));
+
+// app.use('/', routes);
+
+app.set('views', './views');
+app.set('view engine', 'jade');
 
 app.get('/', function(req, res) {
-  res.render('home.html');
+  res.render('index');
 });
 
-app.get('/profile', function(req, res) {
-  res.render('profile.html');
+app.get('/home', function(req, res) {
+  res.render('home');
 });
 
-app.on('stormpath.ready',function(){
-  console.log('Stormpath Ready');
-  app.listen(3000);
+app.use(function(req,res,next){
+    req.db = db;
+    next();
 });
+
+app.use('/expenses', expenses);
+app.use(express.static( 'public'));
+
+app.listen(3000);
