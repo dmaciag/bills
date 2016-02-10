@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dmaciag/bills.git"
+    "url": "git+https://github.com/dmaciag/nBills.git"
   },
   "author": "Daniel Maciag",
   "license": "ISC",
