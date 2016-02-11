@@ -4,9 +4,12 @@ $(document).ready(function(){
     populateExpenses();
 });
 
+$('#buttonAddExpense').on('click', addExpense);
+
 function populateExpenses(){
     var expensesContent = '';
     $.getJSON( '/expenses/expenselist', function(expenses){
+        expensesData = expenses;
         $.each(expenses, function(){
             expensesContent += '<tr>';
             expensesContent += '<td>' + this.name + '</td>';
@@ -20,3 +23,4 @@ function populateExpenses(){
         $('#expenseList table tbody').html(expensesContent);
     });
 }
+

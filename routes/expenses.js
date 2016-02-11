@@ -6,13 +6,17 @@ router.get('/', function(req, res){
 });
 
 router.get('/expenselist', function(req, res){
-    console.log('in expenselist');
+
     var db = req.db;
     var collection = db.get('expenses');
 
     collection.find({},{},function(e,docs){
         res.json(docs);
     });
+});
+
+router.post('/addExpense', function(req,res){
+    console.log('addExpense');
 });
 
 module.exports = router;

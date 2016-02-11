@@ -3,10 +3,15 @@ block content
     h1= title
     p Welcome to bills
 
-    // Wrapper
     #wrapper
-
-        // EXPENSE LIST
+        h2 Add Expense
+        #addExpense
+            fieldset
+                input#inputExpenseName(type='text' placeholder='Name')
+                input#inputExpenseType(type='text' placeholder='Type')
+                input#inputExpenseFee(type='text' placeholder='Fee')
+                input#inputDayOfMonth(type='text' placeholder='Day of Month')
+                button#buttonAddExpense Add Expense
         h2 Expense List
         #expenseList
             table.table-bordered.expenses-table
@@ -17,5 +22,3 @@ block content
                     th Day of Month
                     th Delete?
                 tbody
-        // /EXPENSE LIST
-    // /WRAPPER
