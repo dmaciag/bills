@@ -12,6 +12,8 @@ block content
                 input#inputExpenseFee(type='text' placeholder='Fee')
                 input#inputDayOfMonth(type='text' placeholder='Day of Month')
                 button#buttonAddExpense Add Expense
+        script.
+            $('#buttonAddExpense').on('click', addExpense); 
         h2 Expense List
         #expenseList
             table.table-bordered.expenses-table

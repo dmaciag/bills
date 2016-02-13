@@ -8,15 +8,27 @@ router.get('/', function(req, res){
 router.get('/expenselist', function(req, res){
 
     var db = req.db;
-    var collection = db.get('expenses');
+    var expenses = db.get('expenses');
 
-    collection.find({},{},function(e,docs){
+    expenses.find({},{},function(e,docs){
         res.json(docs);
     });
 });
 
-router.post('/addExpense', function(req,res){
+router.post('/addexpense', function(req,res){
+
+    var db = req.db;
+    var expenses = db.get('expenses');
+    expenses.insert( req.body, function(err, result){
+        console.log('req.body : %o', req.body);
+        console.log('err: %o',err);
+        console.log('res: %o',result);
+        res.send( 
+            err !== null ? { msg : err} : { msg : 'good'}
+        );
+    });
     console.log('addExpense');
+
 });
 
 module.exports = router;

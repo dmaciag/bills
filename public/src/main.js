@@ -4,8 +4,6 @@ $(document).ready(function(){
     populateExpenses();
 });
 
-$('#buttonAddExpense').on('click', addExpense);
-
 function populateExpenses(){
     var expensesContent = '';
     $.getJSON( '/expenses/expenselist', function(expenses){
@@ -24,3 +22,31 @@ function populateExpenses(){
     });
 }
 
+function addExpense(event){
+    event.preventDefault();
+
+    var expense = {
+        'name'          : $('#addExpense fieldset input#inputExpenseName').val(),
+        'type'          : $('#addExpense fieldset input#inputExpenseType').val(), 
+        'fee'           : $('#addExpense fieldset input#inputExpenseFee').val(),
+        'day_of_month'  : $('#addExpense fieldset input#inputDayOfMonth').val()
+    };
+
+    console.log('before ajax');
+    $.ajax({
+        type:'POST',
+        data: expense,
+        url:  '/expenses/addexpense', 
+        dataType: 'JSON'
+    }).done(function( response ){
+        if(response.msg === 'good'){
+            $('#addExpense fieldset input').val('');
+            populateExpenses();
+        }
+        else{
+            console.log('Error: %o', response.msg );
+        }
+    }).fail(function( response ){
+        console.log('Err response : %o', response);
+    });
+};
