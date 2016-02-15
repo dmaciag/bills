@@ -32,7 +32,6 @@ function addExpense(event){
         'day_of_month'  : $('#addExpense fieldset input#inputDayOfMonth').val()
     };
 
-    console.log('before ajax');
     $.ajax({
         type:'POST',
         data: expense,
@@ -44,9 +43,9 @@ function addExpense(event){
             populateExpenses();
         }
         else{
-            console.log('Error: %o', response.msg );
+            console.log('Error Backend : %o', response.msg );
         }
     }).fail(function( response ){
-        console.log('Err response : %o', response);
+        console.log('Error Ajax : %o', response);
     });
 };
