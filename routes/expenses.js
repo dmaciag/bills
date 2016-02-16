@@ -28,15 +28,16 @@ router.post('/addexpense', function(req,res){
 });
 
 router.delete('/deleteexpense/:id', function(req, res){
+    
     var db = req.db;
     var expenses = db.get('expenses');
     
     var expensesToDelete = req.params.id;
     expenses.remove({ '_id' : expensesToDelete }, function(err){
     	res.send(
-	    (err !== null) ? { msg : err } : { msg : '' }    
-	);
-    });
-);
+	       (err !== null) ? { msg : err } : { msg : '' }
+        );
+	});
+});
 
 module.exports = router;

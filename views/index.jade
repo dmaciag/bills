@@ -13,7 +13,7 @@ block content
                 input#inputDayOfMonth(type='text' placeholder='Day of Month')
                 button#buttonAddExpense Add Expense
         script.
-            $('#buttonAddExpense').on('click', addExpense); 
+            $('#buttonAddExpense').on('click', addExpense);
         h2 Expense List
         #expenseList
             table.table-bordered.expenses-table
@@ -24,3 +24,5 @@ block content
                     th Day of Month
                     th Delete?
                 tbody
+        script.
+            $('#expenseList table tbody').on('click', 'td a.deleteExpenseLink', deleteExpense);

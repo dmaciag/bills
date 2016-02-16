@@ -14,7 +14,7 @@ function populateExpenses(){
             expensesContent += '<td>' + this.type + '</td>';
             expensesContent += '<td>' + this.fee  + '</td>';
             expensesContent += '<td>' + this.day_of_month  + '</td>';
-            expensesContent += '<td>' + '<a href="#" class="delete_expense" rel="' + this._id + '">delete</a>' + '</td>';
+            expensesContent += '<td>' + '<a href="#" class="deleteExpenseLink" rel="' + this._id + '">delete</a>' + '</td>';
             expensesContent += '<tr>';
         });
 
@@ -48,4 +48,20 @@ function addExpense(event){
     }).fail(function( response ){
         console.log('Error Ajax : %o', response);
     });
-};
+}
+
+function deleteExpense(event){
+    $.ajax({
+        type: 'DELETE',
+        url:  '/expenses/deleteexpense/' + $(this).attr('rel')
+    }).done(function(response){
+        if( response.msg != ''){
+            console.log('Error backend : %o', response.msg);
+        }
+        else{
+            populateExpenses();
+        }
+    }).fail(function(response){
+        console.log('Error ajax : $o', response);
+    });
+}
