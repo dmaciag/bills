@@ -1,28 +1,35 @@
 extends layout
 block content
     h1= title
-    p Welcome to bills
-
     #wrapper
-        h2 Add Expense
-        #addExpense
-            fieldset
-                input#inputExpenseName(type='text' placeholder='Name')
-                input#inputExpenseType(type='text' placeholder='Type')
-                input#inputExpenseFee(type='text' placeholder='Fee')
-                input#inputDayOfMonth(type='text' placeholder='Day of Month')
-                button#buttonAddExpense Add Expense
-        script.
-            $('#buttonAddExpense').on('click', addExpense);
-        h2 Expense List
-        #expenseList
-            table.table-bordered.expenses-table
-                thead
-                    th Name
-                    th Type
-                    th Fee
-                    th Day of Month
-                    th Delete?
-                tbody
-        script.
-            $('#expenseList table tbody').on('click', 'td a.deleteExpenseLink', deleteExpense);
+        div#expense-container
+            h5 Add Expense
+            #addExpense
+                fieldset
+                    input#inputExpenseName(type='text' placeholder='Name')
+                    input#inputExpenseType(type='text' placeholder='Type')
+                    input#inputExpenseFee(type='text' placeholder='Fee')
+                    input#inputDayOfMonth(type='text' placeholder='Day of Month')
+            script.
+                $('#addExpense').on('keypress', checkThenAddExpense);
+            #expenseList
+                table.table-bordered.expenses-table
+                    thead
+                        th Name
+                        th Type
+                        th Fee
+                        th Day of Month
+                        th Delete
+                        th Edit
+                    tbody
+            script.
+                $('#expenseList table tbody').on('click', 'td a.deleteExpenseLink', deleteExpense);
+                $('#expenseList table tbody').on('click', 'td a.editExpenseLink', editExpense);
+            br
+            div Total Fee Monthly: 
+                span#totalFeeMonthly
+            br
+            div Need to Make : 
+                div#needToMakeWeekly
+                div#needToMakeMonthly
+                div#needToMakeYearly

@@ -1,7 +1,19 @@
 .expenses-table{
-    width: 50% !important;
+    width: 100%;
 }
 
 .table-head{
     text-align: center;
+}
+
+#expense-container{
+    position: relative;
+    display: inline-block;
+    max-width: 50%;
+}
+
+#inputIncomeCompany, #inputIncomeRate, #inputIncomeFrequency, 
+
+#inputExpenseName, #inputExpenseType, #inputExpenseFee, #inputDayOfMonth{
+    width: 24%;
 }

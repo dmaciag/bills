@@ -6,24 +6,45 @@ $(document).ready(function(){
 
 function populateExpenses(){
     var expensesContent = '';
+    var totalFeeMonthly = 0;
+    var needToMakeMonthly = 0;
+    var tax = 0.3;
     $.getJSON( '/expenses/expenselist', function(expenses){
         expensesData = expenses;
         $.each(expenses, function(){
+            if( this.type == 'monthly' )        needToMakeMonthly += parseFloat(this.fee);
+            else if( this.type == 'yearly' )    needToMakeMonthly += 1/12 * parseFloat(this.fee);
+            else if( this.type == 'weekly' )    needToMakeMonthly += 4.357 * parseFloat(this.fee);
+            else needToMakeMonthly += parseFloat(this.fee);
+            totalFeeMonthly += (parseFloat(this.fee) !== null) ? parseFloat(this.fee) : 0;
             expensesContent += '<tr>';
             expensesContent += '<td>' + this.name + '</td>';
             expensesContent += '<td>' + this.type + '</td>';
             expensesContent += '<td>' + this.fee  + '</td>';
             expensesContent += '<td>' + this.day_of_month  + '</td>';
             expensesContent += '<td>' + '<a href="#" class="deleteExpenseLink" rel="' + this._id + '">delete</a>' + '</td>';
+            expensesContent += '<td>' + '<a href="#" class="editExpenseLink" rel="' + this._id + '">edit</a>' + '</td>';
             expensesContent += '<tr>';
         });
 
+        $('#needToMakeWeekly').html('$' + parseInt(needToMakeMonthly/(1-tax)/4.357) + ' weekly');
+        $('#needToMakeMonthly').html('$' + parseInt(needToMakeMonthly/(1-tax)) + ' monthly');
+        $('#needToMakeYearly').html('$' + parseInt(needToMakeMonthly*12/(1-tax)) + ' yearly');
+
         $('#expenseList table tbody').html(expensesContent);
+        $('#totalFeeMonthly').html(totalFeeMonthly);
     });
 }
 
+function checkThenAddExpense(event){
+    if(event.keyCode == '13'){
+        addExpense();
+    }
+}
+
 function addExpense(event){
-    event.preventDefault();
+    if(event != null)
+        event.preventDefault();
 
     var expense = {
         'name'          : $('#addExpense fieldset input#inputExpenseName').val(),
@@ -65,3 +86,29 @@ function deleteExpense(event){
         console.log('Error ajax : $o', response);
     });
 }
+
+function editExpense(event){
+    $.ajax({
+        type: 'PUT',
+        url:  '/expenses/editexpense/' + $(this).attr('rel')
+    }).done(function(response){
+        if( response.msg != ''){
+            console.log('Error backend : %o', response.msg);
+        }
+        else{
+            populateExpenses();
+        }
+    }).fail(function(response){
+        console.log('Error ajax : $o', response);
+    });
+}
+
+
+
+
+
+
+
+
+
+
