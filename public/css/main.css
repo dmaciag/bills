@@ -12,8 +12,6 @@
     max-width: 50%;
 }
 
-#inputIncomeCompany, #inputIncomeRate, #inputIncomeFrequency, 
-
 #inputExpenseName, #inputExpenseType, #inputExpenseFee, #inputDayOfMonth{
     width: 24%;
 }
