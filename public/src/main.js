@@ -59,7 +59,7 @@ function addExpense(event){
         url:  '/expenses/addexpense', 
         dataType: 'JSON'
     }).done(function( response ){
-        if(response.msg === 'good'){
+        if(response.msg === 'success'){
             $('#addExpense fieldset input').val('');
             populateExpenses();
         }
@@ -76,7 +76,7 @@ function deleteExpense(event){
         type: 'DELETE',
         url:  '/expenses/deleteexpense/' + $(this).attr('rel')
     }).done(function(response){
-        if( response.msg != ''){
+        if( response.msg != 'success'){
             console.log('Error backend : %o', response.msg);
         }
         else{
@@ -88,11 +88,12 @@ function deleteExpense(event){
 }
 
 function editExpense(event){
+    //todo
     $.ajax({
         type: 'PUT',
         url:  '/expenses/editexpense/' + $(this).attr('rel')
     }).done(function(response){
-        if( response.msg != ''){
+        if( response.msg != 'success'){
             console.log('Error backend : %o', response.msg);
         }
         else{
@@ -103,9 +104,53 @@ function editExpense(event){
     });
 }
 
+function goToIncome(){
+    window.location.href = '/income';
+}
 
+function addIncome(event){
+    if(event != null)
+        event.preventDefault();
 
+    var income = {
+        'name'          : $('#addExpense fieldset input#inputExpenseName').val(),
+        'type'          : $('#addExpense fieldset input#inputExpenseType').val(), 
+        'fee'           : $('#addExpense fieldset input#inputExpenseFee').val(),
+        'day_of_month'  : $('#addExpense fieldset input#inputDayOfMonth').val()
+    };
 
+    $.ajax({
+        type:'POST',
+        data: income,
+        url:  '/incomes/addincome', 
+        dataType: 'JSON'
+    }).done(function( response ){
+        if(response.msg === 'success'){
+            $('#addIncome fieldset input').val('');
+        }
+        else{
+            console.log('Error Backend : %o', response.msg );
+        }
+    }).fail(function( response ){
+        console.log('Error Ajax : %o', response);
+    });
+}
+
+function loadIncomes(){
+    $.ajax({
+        type: 'GET',
+        url:  '/incomes/loadincomes/'
+    }).done(function(response){
+        if( response.msg != 'success'){
+            console.log('Error backend : %o', response.msg);
+        }
+        else{
+            populateExpenses();
+        }
+    }).fail(function(response){
+        console.log('Error ajax : $o', response);
+    });
+}
 
 
 

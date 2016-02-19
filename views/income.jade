@@ -1,0 +1,18 @@
+extends layout
+block content
+    h5 Add Income
+    div#addIncomeInputLabels
+        div#company-name Company Name
+        div#title Title
+        div#payRate Pay Rate
+    fieldset#addIncomeFieldset
+        div
+            input#companyNameInput(type='text')
+        div
+            input#companyTitleInput(type='text')
+        div
+            select
+                option(value='yearly') yearly
+                option(value='monthly') monthly
+                option(value='weekly') weekly
+        input#salaryInput(type='text')

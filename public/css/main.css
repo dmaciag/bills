@@ -15,3 +15,23 @@
 #inputExpenseName, #inputExpenseType, #inputExpenseFee, #inputDayOfMonth{
     width: 24%;
 }
+
+#company-name{
+    color: red;
+}
+
+#addIncome{
+    position: relative;
+}
+
+#addIncomeInputLabels{
+    float: left;
+}
+
+#addIncomeFieldset{
+    float: left;
+}
+
+.jumbotron{
+    height: 400px;
+}

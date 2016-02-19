@@ -12,11 +12,15 @@ app.set('views', './views');
 app.set('view engine', 'jade');
 
 app.get('/', function(req, res) {
-  res.render('index');
+    res.render('expense');
 });
 
 app.get('/home', function(req, res) {
-  res.render('home');
+    res.render('home');
+});
+
+app.get('/income', function(req, res){
+    res.render('income');
 });
 
 app.use(bodyParser.json());
