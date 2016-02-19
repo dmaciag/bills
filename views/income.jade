@@ -1,18 +1,34 @@
 extends layout
 block content
     h5 Add Income
-    div#addIncomeInputLabels
-        div#company-name Company Name
-        div#title Title
-        div#payRate Pay Rate
-    fieldset#addIncomeFieldset
-        div
-            input#companyNameInput(type='text')
-        div
-            input#companyTitleInput(type='text')
-        div
-            select
-                option(value='yearly') yearly
-                option(value='monthly') monthly
-                option(value='weekly') weekly
-        input#salaryInput(type='text')
+    div#addIncomeContainer
+        form
+            ul.form-style-1
+                li
+                    label
+                        | Company Name 
+                        span.required *
+                    input.field-long(type='text', name='field1', placeholder='Google')
+                li
+                    label
+                        | Company Title 
+                        span.required *
+                    input.field-long(type='text', name='field1', placeholder='Software Engineer')
+                li
+                    label Pay Period
+                    select.field-select(name='field4')
+                        option(value='Yearly') Yearly
+                        option(value='Monthly') Monthly
+                        option(value='Weekly') Weekly
+                        option(value='Hourly') Hourly
+                li
+                    label 
+                        | Salary Per Period
+                        span.required *
+                    input#field5.field-short(type='text', name='field1', placeholder='30')
+                li
+                    label
+                        | Periods Per Month
+                    input#field5.field-short(type='text', name='field1', placeholder='4.357')      
+                li
+                    input(type='submit', value='Submit')
