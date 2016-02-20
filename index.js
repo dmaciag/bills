@@ -17,10 +17,6 @@ app.get('/', function(req, res) {
     res.render('expense');
 });
 
-app.post('/income/addincome', function(req, res){
-    res.send('bugatti');
-});
-
 app.get('/home', function(req, res) {
     res.render('home');
 });
