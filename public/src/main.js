@@ -1,7 +1,9 @@
 var expensesData = [];
+var incomesData  = [];
 
 $(document).ready(function(){
     populateExpenses();
+    populateIncomes();
 });
 
 function populateExpenses(){
@@ -122,7 +124,7 @@ function addIncome(event){
     $.ajax({
         type:'POST',
         data: income,
-        url:  '/incomes/addincome', 
+        url:  '/income/addincome', 
         dataType: 'JSON'
     }).done(function( response ){
         if(response.msg === 'success'){
@@ -136,24 +138,34 @@ function addIncome(event){
     });
 }
 
-function loadIncomes(){
-    $.ajax({
-        type: 'GET',
-        url:  '/incomes/loadincomes/'
-    }).done(function(response){
-        if( response.msg != 'success'){
-            console.log('Error backend : %o', response.msg);
-        }
-        else{
-            populateExpenses();
-        }
-    }).fail(function(response){
-        console.log('Error ajax : $o', response);
-    });
+function changeIncomeInputFields(){
+    var placeHolderSalary = 0;
+    if( $('.payPeriodSelect').val() == 'Hourly')        placeHolderSalary = 30;
+    else if( $('.payPeriodSelect').val() == 'Weekly')   placeHolderSalary = 700;
+    else if( $('.payPeriodSelect').val() == 'Monthly')  placeHolderSalary = 2000;
+    else if( $('.payPeriodSelect').val() == 'Yearly' )  placeHolderSalary = 75000;
+    $('.salaryTerm').text($('.payPeriodSelect').val() + ' ');
+    $('.salary').attr('placeholder', placeHolderSalary);
+    $('.salary').attr('name', $('.payPeriodSelect').val().toLowerCase());
 }
 
-
-
-
+function populateIncomes(){
+    var incomesContent = '';
+    $.getJSON( '/incomes/incomelist', function(income){
+        incomesData = income;
+        $.each(income, function(){
+            var monthly = (this.monthly != null) ? this.monthly : this.yearly/12;
+            var yearly  = (this.yearly != null)  ? this.yearly  : this.monthly*12;
+            incomesContent += '<tr>';
+            incomesContent += '<td>' + this.company_name + '</td>';
+            incomesContent += '<td>' + this.company_title + '</td>';
+            incomesContent += '<td>' + monthly  + '</td>';
+            incomesContent += '<td>' + yearly  + '</td>';
+            incomesContent += '<td>' + '<a href="#" class="deleteExpenseLink" rel="' + this._id + '">delete</a>' + '</td>';
+            incomesContent += '<tr>';
+        });
+        $('#incomeList table tbody').html(incomesContent);
+    });
+}
 
 

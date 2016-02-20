@@ -4,7 +4,7 @@ block content
     #wrapper
         div#expense-container
             h5 Add Expense
-            #addExpense
+            div#addExpense
                 fieldset
                     input#inputExpenseName(type='text' placeholder='Name')
                     input#inputExpenseType(type='text' placeholder='Type')
@@ -12,7 +12,7 @@ block content
                     input#inputDayOfMonth(type='text' placeholder='Day of Month')
             script.
                 $('#addExpense').on('keypress', checkThenAddExpense);
-            #expenseList
+            div#expenseList
                 table.table-bordered.expenses-table
                     thead
                         th Name
@@ -37,3 +37,14 @@ block content
             button#goToIncome Incomes 
             script.
                 $('#goToIncome').on('click', goToIncome);
+        div#incomeContainer
+            h5 Incomes
+            div#incomeList
+               table.table-bordered.incomes-table
+                    thead
+                        th Company Name
+                        th Company Title
+                        th Monthly Income
+                        th Yearly Income
+                        th Delete
+                    tbody 

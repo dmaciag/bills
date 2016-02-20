@@ -15,6 +15,11 @@
 .jumbotron{
     height: 700px;
 }
+
+.addIncome{
+    left: 60px;
+    position: relative;
+}
 /*
  The following block of form-style css was imported from sanwebe.com
 */
@@ -46,6 +51,7 @@
 .form-style-1 input[type=email],
 textarea, 
 select{
+    height: 30px;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;

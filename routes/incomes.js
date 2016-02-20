@@ -1,12 +1,16 @@
 var express = require('express');
 var router  = express.Router();
 
+router.get('/', function(req, res){
+    res.send('need a response');
+});
+
 router.post('/addincome', function(req, res){
 
     var db = req.db;
     var incomes = db.get('incomes');
 
-    expenincomesses.insert( req.body, function(err, result){
+    incomes.insert( req.body, function(err, result){
         res.send( 
             err !== null ? { msg : err} : { msg : 'success'}
         );
@@ -14,7 +18,7 @@ router.post('/addincome', function(req, res){
 
 });
 
-router.get('/loadincomes', function(req, res){
+router.get('/incomelist', function(req, res){
 
     var db = req.db;
     var incomes = db.get('incomes');
@@ -23,3 +27,5 @@ router.get('/loadincomes', function(req, res){
         res.json(docs);
     });
 });
+
+module.exports = router;
