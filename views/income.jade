@@ -7,6 +7,11 @@ block content
                     h5 Add Income
                 li
                     label
+                        | Name of Employee
+                        span.required *
+                    input.field-long(type='text', name='name_of_worker', placeholder='Daniel')
+                li
+                    label
                         | Company Name 
                         span.required *
                     input.field-long(type='text', name='company_name', placeholder='Google')
@@ -27,7 +32,7 @@ block content
                         span.salaryTerm Yearly  
                         | Salary
                         span.required *
-                    input#field5.salary.field-short(type='text', name='Yearly', placeholder='30')
+                    input#field5.salary.field-short(type='text', name='yearly', placeholder='75000')
                 li
                     input(type='submit', value='Submit')
     script.

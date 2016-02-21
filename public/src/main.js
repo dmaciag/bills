@@ -7,17 +7,21 @@ $(document).ready(function(){
 });
 
 function populateExpenses(){
+    
     var expensesContent = '';
     var totalFeeMonthly = 0;
     var needToMakeMonthly = 0;
     var tax = 0.3;
+
     $.getJSON( '/expenses/expenselist', function(expenses){
         expensesData = expenses;
         $.each(expenses, function(){
+
             if( this.type == 'monthly' )        needToMakeMonthly += parseFloat(this.fee);
             else if( this.type == 'yearly' )    needToMakeMonthly += 1/12 * parseFloat(this.fee);
             else if( this.type == 'weekly' )    needToMakeMonthly += 4.357 * parseFloat(this.fee);
             else needToMakeMonthly += parseFloat(this.fee);
+
             totalFeeMonthly += (parseFloat(this.fee) !== null) ? parseFloat(this.fee) : 0;
             expensesContent += '<tr>';
             expensesContent += '<td>' + this.name + '</td>';
@@ -139,33 +143,109 @@ function addIncome(event){
 }
 
 function changeIncomeInputFields(){
+
     var placeHolderSalary = 0;
+    
     if( $('.payPeriodSelect').val() == 'Hourly')        placeHolderSalary = 30;
     else if( $('.payPeriodSelect').val() == 'Weekly')   placeHolderSalary = 700;
     else if( $('.payPeriodSelect').val() == 'Monthly')  placeHolderSalary = 2000;
     else if( $('.payPeriodSelect').val() == 'Yearly' )  placeHolderSalary = 75000;
+
+    if( $('.payPeriodSelect').val() == 'Hourly' && !$('#hoursPerWeek').length ){
+        $(this).append('<li id="horusPerWeekLi"><label for="hours_per_week">Hours Per Week</label><input id="hoursPerWeek" class="field-short" type="text" placeholder="40" name="hours_per_week"/></li>');
+    }
+    else if( $('.payPeriodSelect').val() != 'Hourly' && $('#hoursPerWeek').length ){
+        $('#horusPerWeekLi').remove();
+    }
+
     $('.salaryTerm').text($('.payPeriodSelect').val() + ' ');
     $('.salary').attr('placeholder', placeHolderSalary);
     $('.salary').attr('name', $('.payPeriodSelect').val().toLowerCase());
 }
 
 function populateIncomes(){
+    
     var incomesContent = '';
+
+    var totalIncomeMonthly = 0;
+    var totalIncomeYearly  = 0;
+    var totalIncomeWeekly  = 0;
+
     $.getJSON( '/incomes/incomelist', function(income){
         incomesData = income;
         $.each(income, function(){
-            var monthly = (this.monthly != null) ? this.monthly : this.yearly/12;
-            var yearly  = (this.yearly != null)  ? this.yearly  : this.monthly*12;
+            
+            var hourly  = 0;
+            var weekly  = 0;
+            var monthly = 0;
+            var yearly  = 0;
+            
+            var workHoursPerWeek = ( this.hours_per_week != null) ? this.hours_per_week : 40; //FT
+
+            if(this.monthly != null){
+                hourly  = this.monthly*12/52/workHoursPerWeek;
+                weekly  = this.monthly*12/52;
+                monthly = this.monthly;
+                yearly  = this.monthly*12;
+            }
+            else if(this.yearly !=null){
+                hourly  = this.yearly/52/workHoursPerWeek;
+                weekly  = this.yearly/52;
+                monthly = this.yearly/12;
+                yearly  = this.yearly;
+            }
+            else if(this.weekly != null){
+                hourly  = this.weekly/workHoursPerWeek;
+                weekly  = this.weekly;
+                monthly = this.weekly*52/12;
+                yearly  = this.weekly*52;
+            }
+            else if(this.hourly !=null){
+                hourly  = this.hourly;
+                weekly  = this.hourly*workHoursPerWeek;
+                monthly = this.hourly*workHoursPerWeek*52/12;
+                yearly  = this.hourly*workHoursPerWeek*52;
+            }
+            else return false;
+
+            totalIncomeWeekly  += parseInt(weekly);
+            totalIncomeMonthly += parseInt(monthly);
+            totalIncomeYearly  += parseInt(yearly);
+
+
             incomesContent += '<tr>';
+            incomesContent += '<td>' + this.name_of_worker + '</td>';
             incomesContent += '<td>' + this.company_name + '</td>';
             incomesContent += '<td>' + this.company_title + '</td>';
-            incomesContent += '<td>' + monthly  + '</td>';
-            incomesContent += '<td>' + yearly  + '</td>';
-            incomesContent += '<td>' + '<a href="#" class="deleteExpenseLink" rel="' + this._id + '">delete</a>' + '</td>';
+            incomesContent += '<td>' + workHoursPerWeek  + '</td>';
+            incomesContent += '<td>' + parseInt(hourly)  + '</td>';
+            incomesContent += '<td>' + parseInt(weekly)  + '</td>';
+            incomesContent += '<td>' + parseInt(monthly)  + '</td>';
+            incomesContent += '<td>' + parseInt(yearly)  + '</td>';
+            incomesContent += '<td>' + '<a href="#" class="deleteIncomeLink" rel="' + this._id + '">delete</a>' + '</td>';
             incomesContent += '<tr>';
         });
+
         $('#incomeList table tbody').html(incomesContent);
+
+        $('#totalIncomeWeekly').html(totalIncomeWeekly);
+        $('#totalIncomeMonthly').html(totalIncomeMonthly);
+        $('#totalIncomeYearly').html(totalIncomeYearly);
     });
 }
 
-
+function deleteIncome(event){
+    $.ajax({
+        type: 'DELETE',
+        url:  '/incomes/deleteincome/' + $(this).attr('rel')
+    }).done(function(response){
+        if( response.msg != 'success'){
+            console.log('Error backend : %o', response.msg);
+        }
+        else{
+            populateIncomes();
+        }
+    }).fail(function(response){
+        console.log('Error ajax : $o', response);
+    });
+}

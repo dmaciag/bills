@@ -9,11 +9,6 @@
 #expense-container{
     position: relative;
     display: inline-block;
-    max-width: 50%;
-}
-
-.jumbotron{
-    height: 700px;
 }
 
 .addIncome{
@@ -106,4 +101,56 @@ select{
 }
 .form-style-1 .required{
     color:red;
+}
+
+table {
+    border-collapse:collapse;
+    margin-bottom:15px;
+    width:90%;
+}
+
+table td,
+table th{
+    padding:5px;
+    border:1px solid #fff;
+    border-width:0 1px 1px 0;
+}
+    
+thead th{
+    background:#91c5d4;
+}
+        
+thead th[colspan],
+thead th[rowspan]{
+        background:#66a9bd;
+}
+    
+tbody th,
+tfoot th{
+    text-align:left;
+    background:#91c5d4;
+}
+    
+tbody td,
+tfoot td{
+    text-align:center;
+    background:#d5eaf0;
+}
+    
+tfoot th{
+    background:#b0cc7f;
+}
+    
+tfoot td{
+    background:#d7e1c5;
+    font-weight:bold;
+}
+        
+tbody tr.odd td{ 
+    background:#bcd9e1;
+}
+
+/* the following body is made by @_ighosh */
+body{
+    background-image: linear-gradient(to left, rgb(192, 36, 37), rgb(240, 203, 53));
 }

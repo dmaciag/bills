@@ -4,6 +4,9 @@ block content
     #wrapper
         div#expense-container
             h5 Add Expense
+            button#goToIncome Add Income 
+            script.
+                $('#goToIncome').on('click', goToIncome);
             div#addExpense
                 fieldset
                     input#inputExpenseName(type='text' placeholder='Name')
@@ -22,29 +25,46 @@ block content
                         th Delete
                         th Edit
                     tbody
+                    tfoot
+                        tr
+                            th(scope='row') Total Expense
+                                td 
+                                td#totalFeeMonthly
+                                td
+                                td
+                                td
             script.
                 $('#expenseList table tbody').on('click', 'td a.deleteExpenseLink', deleteExpense);
                 $('#expenseList table tbody').on('click', 'td a.editExpenseLink', editExpense);
-            br
-            div Total Fee Monthly: 
-                span#totalFeeMonthly
-            br
             div Need to Make : 
-                div#needToMakeWeekly
-                div#needToMakeMonthly
-                div#needToMakeYearly
-            br
-            button#goToIncome Incomes 
-            script.
-                $('#goToIncome').on('click', goToIncome);
+                span#needToMakeWeekly
+                span#needToMakeMonthly 
+                span#needToMakeYearly 
         div#incomeContainer
-            h5 Incomes
             div#incomeList
                table.table-bordered.incomes-table
                     thead
+                        th Employee Name
                         th Company Name
-                        th Company Title
+                        th Title
+                        th Hours Per Week
+                        th Hourly Income
+                        th Weekly Income
                         th Monthly Income
                         th Yearly Income
                         th Delete
                     tbody 
+                    tfoot
+                        tr
+                            th(scope='row') Total Income
+                                td
+                                td
+                                td
+                                td
+                                td#totalIncomeWeekly
+                                td#totalIncomeMonthly
+                                td#totalIncomeYearly
+                                td
+
+            script.
+                $('#incomeList table tbody').on('click', 'td a.deleteIncomeLink', deleteIncome);
