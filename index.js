@@ -14,7 +14,7 @@ app.set('views', './views');
 app.set('view engine', 'jade');
 
 app.get('/', function(req, res) {
-    res.render('expense');
+    res.render('home');
 });
 
 app.get('/home', function(req, res) {
@@ -23,6 +23,10 @@ app.get('/home', function(req, res) {
 
 app.get('/income', function(req, res){
     res.render('income');
+});
+
+app.get('/expense', function(req, res){
+    res.render('expense');
 });
 
 app.use(bodyParser.json());

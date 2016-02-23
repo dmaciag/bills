@@ -1,70 +1,42 @@
 extends layout
 block content
-    h1= title
-    #wrapper
-        div#expense-container
-            h5 Add Expense
-            button#goToIncome Add Income 
-            script.
-                $('#goToIncome').on('click', goToIncome);
-            div#addExpense
-                fieldset
-                    input#inputExpenseName(type='text' placeholder='Name')
-                    input#inputExpenseType(type='text' placeholder='Type')
-                    input#inputExpenseFee(type='text' placeholder='Fee')
-                    input#inputDayOfMonth(type='text' placeholder='Day of Month')
-            script.
-                $('#addExpense').on('keypress', checkThenAddExpense);
-            div#expenseList
-                table.table-bordered.expenses-table
-                    thead
-                        th Name
-                        th Type
-                        th Fee
-                        th Day of Month
-                        th Delete
-                        th Edit
-                    tbody
-                    tfoot
-                        tr
-                            th(scope='row') Total Expense
-                                td 
-                                td#totalFeeMonthly
-                                td
-                                td
-                                td
-            script.
-                $('#expenseList table tbody').on('click', 'td a.deleteExpenseLink', deleteExpense);
-                $('#expenseList table tbody').on('click', 'td a.editExpenseLink', editExpense);
-            div Need to Make : 
-                span#needToMakeWeekly
-                span#needToMakeMonthly 
-                span#needToMakeYearly 
-        div#incomeContainer
-            div#incomeList
-               table.table-bordered.incomes-table
-                    thead
-                        th Employee Name
-                        th Company Name
-                        th Title
-                        th Hours Per Week
-                        th Hourly Income
-                        th Weekly Income
-                        th Monthly Income
-                        th Yearly Income
-                        th Delete
-                    tbody 
-                    tfoot
-                        tr
-                            th(scope='row') Total Income
-                                td
-                                td
-                                td
-                                td
-                                td#totalIncomeWeekly
-                                td#totalIncomeMonthly
-                                td#totalIncomeYearly
-                                td
-
-            script.
-                $('#incomeList table tbody').on('click', 'td a.deleteIncomeLink', deleteIncome);
+    div#addExpenseContainer
+        form#addExpenseForm(action='/expenses/addexpense' method='post')
+            ul.form-style-1
+                li  
+                    h5 Add Expense
+                li
+                    label
+                        | Name of Expense
+                        span.required *
+                    input.field-long(type='text', name='name_of_expense', placeholder='Electric Bill')
+                li
+                    label
+                        | Company/Person Billable To 
+                        span.required *
+                    input.field-long(type='text', name='company_name', placeholder='Con Edison')
+                li
+                    label
+                        | Payee
+                        span.required *
+                    input.field-long(type='text', name='payee', placeholder='George')
+                li#payPeriod
+                    label Fee Period
+                    select.payPeriodSelect.field-select(name='pay_period')
+                        option(value='Monthly') Monthly
+                        option(value='Yearly') Yearly
+                        option(value='Weekly') Weekly
+                li
+                    label 
+                        span.salaryTerm Monthly  
+                        | Fee
+                        span.required *
+                    input#field5.salary.field-short(type='text', name='monthly', placeholder='350')
+                li#dayOfMonthLi
+                    label
+                        span.dayOfMonth Day of Month
+                    input#field5.dayOfMonth.field-short(type='text', name='day_of_month', placeholder='12')
+                li
+                    input(type='submit', value='Submit')
+    script.
+        $('#payPeriod').on('change', changeExpenseInputFields);

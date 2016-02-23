@@ -21,9 +21,8 @@ router.post('/addexpense', function(req,res){
     var expenses = db.get('expenses');
 
     expenses.insert( req.body, function(err, result){
-        res.send( 
-            err !== null ? { msg : err} : { msg : 'success'}
-        );
+        if(err != null) res.send('Insert Income Error');
+        else res.redirect('/');
     });
 });
 

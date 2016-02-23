@@ -1,51 +1,59 @@
 var expensesData = [];
 var incomesData  = [];
 
+var pieData = [];
+var barDat  = {};
+
+var myPieChart = '';
+var myBarChart = '';
+
+var totalIncomeMonthlyAfterTax = 0;
+var totalExpensesMonthly = 0;
+
 $(document).ready(function(){
     populateExpenses();
     populateIncomes();
+
 });
 
+
 function populateExpenses(){
-    
+
     var expensesContent = '';
     var totalFeeMonthly = 0;
     var needToMakeMonthly = 0;
+    var totalMonthlyCost = 0;
     var tax = 0.3;
 
     $.getJSON( '/expenses/expenselist', function(expenses){
         expensesData = expenses;
         $.each(expenses, function(){
 
-            if( this.type == 'monthly' )        needToMakeMonthly += parseFloat(this.fee);
-            else if( this.type == 'yearly' )    needToMakeMonthly += 1/12 * parseFloat(this.fee);
-            else if( this.type == 'weekly' )    needToMakeMonthly += 4.357 * parseFloat(this.fee);
-            else needToMakeMonthly += parseFloat(this.fee);
+            var monthlyCost = 0;
+            if( this.pay_period == 'Monthly' )     monthlyCost = this.monthly;
+            else if( this.pay_period == 'Weekly' ) monthlyCost = this.weekly*52/12;
+            else if( this.pay_period == 'Yearly')  monthlyCost = this.yearly/12;
+            else                                   monthlyCost = null;
 
             totalFeeMonthly += (parseFloat(this.fee) !== null) ? parseFloat(this.fee) : 0;
             expensesContent += '<tr>';
-            expensesContent += '<td>' + this.name + '</td>';
-            expensesContent += '<td>' + this.type + '</td>';
-            expensesContent += '<td>' + this.fee  + '</td>';
-            expensesContent += '<td>' + this.day_of_month  + '</td>';
+            expensesContent += '<td>' + this.name_of_expense + '</td>';
+            expensesContent += '<td>' + this.company_name + '</td>';
+            expensesContent += '<td>' + this.pay_period + '</td>';
+            expensesContent += '<td>' + parseInt(monthlyCost)  + '</td>';
+            expensesContent += '<td>' + 04 + '</td>';
             expensesContent += '<td>' + '<a href="#" class="deleteExpenseLink" rel="' + this._id + '">delete</a>' + '</td>';
-            expensesContent += '<td>' + '<a href="#" class="editExpenseLink" rel="' + this._id + '">edit</a>' + '</td>';
             expensesContent += '<tr>';
+
+            totalMonthlyCost += parseInt(monthlyCost);
+
         });
 
-        $('#needToMakeWeekly').html('$' + parseInt(needToMakeMonthly/(1-tax)/4.357) + ' weekly');
-        $('#needToMakeMonthly').html('$' + parseInt(needToMakeMonthly/(1-tax)) + ' monthly');
-        $('#needToMakeYearly').html('$' + parseInt(needToMakeMonthly*12/(1-tax)) + ' yearly');
+        totalExpensesMonthly = totalMonthlyCost;
 
         $('#expenseList table tbody').html(expensesContent);
-        $('#totalFeeMonthly').html(totalFeeMonthly);
+        $('#totalFeeMonthly').html(totalMonthlyCost);
     });
-}
-
-function checkThenAddExpense(event){
-    if(event.keyCode == '13'){
-        addExpense();
-    }
 }
 
 function addExpense(event){
@@ -66,7 +74,6 @@ function addExpense(event){
         dataType: 'JSON'
     }).done(function( response ){
         if(response.msg === 'success'){
-            $('#addExpense fieldset input').val('');
             populateExpenses();
         }
         else{
@@ -93,25 +100,12 @@ function deleteExpense(event){
     });
 }
 
-function editExpense(event){
-    //todo
-    $.ajax({
-        type: 'PUT',
-        url:  '/expenses/editexpense/' + $(this).attr('rel')
-    }).done(function(response){
-        if( response.msg != 'success'){
-            console.log('Error backend : %o', response.msg);
-        }
-        else{
-            populateExpenses();
-        }
-    }).fail(function(response){
-        console.log('Error ajax : $o', response);
-    });
-}
-
 function goToIncome(){
     window.location.href = '/income';
+}
+
+function goToExpense(){
+    window.location.href = '/expense';
 }
 
 function addIncome(event){
@@ -132,7 +126,7 @@ function addIncome(event){
         dataType: 'JSON'
     }).done(function( response ){
         if(response.msg === 'success'){
-            $('#addIncome fieldset input').val('');
+            console.log(totalExpensesMonthly);
         }
         else{
             console.log('Error Backend : %o', response.msg );
@@ -140,6 +134,7 @@ function addIncome(event){
     }).fail(function( response ){
         console.log('Error Ajax : %o', response);
     });
+
 }
 
 function changeIncomeInputFields(){
@@ -152,24 +147,42 @@ function changeIncomeInputFields(){
     else if( $('.payPeriodSelect').val() == 'Yearly' )  placeHolderSalary = 75000;
 
     if( $('.payPeriodSelect').val() == 'Hourly' && !$('#hoursPerWeek').length ){
-        $(this).append('<li id="horusPerWeekLi"><label for="hours_per_week">Hours Per Week</label><input id="hoursPerWeek" class="field-short" type="text" placeholder="40" name="hours_per_week"/></li>');
+        $(this).append('<li id="hoursPerWeekLi"><label for="hours_per_week">Hours Per Week</label><input id="hoursPerWeek" class="field-short" type="text" placeholder="40" name="hours_per_week"/></li>');
     }
     else if( $('.payPeriodSelect').val() != 'Hourly' && $('#hoursPerWeek').length ){
-        $('#horusPerWeekLi').remove();
+        $('#hoursPerWeekLi').remove();
     }
 
     $('.salaryTerm').text($('.payPeriodSelect').val() + ' ');
     $('.salary').attr('placeholder', placeHolderSalary);
     $('.salary').attr('name', $('.payPeriodSelect').val().toLowerCase());
+
+    if( $('.payPeriodSelect').val() !='Monthly' && $('#dayOfMonthLi').length){
+        $('#dayOfMonthLi').remove();
+    }
+}
+
+function changeExpenseInputFields(){
+    var placeHolderFee = 0;
+    
+    if( $('.payPeriodSelect').val() == 'Weekly')   placeHolderFee = 40;
+    else if( $('.payPeriodSelect').val() == 'Monthly')  placeHolderFee = 350;
+    else if( $('.payPeriodSelect').val() == 'Yearly' )  placeHolderFee = 2000;
+
+    $('.salaryTerm').text($('.payPeriodSelect').val() + ' ');
+    $('.salary').attr('placeholder', placeHolderFee);
+    $('.salary').attr('name', $('.payPeriodSelect').val().toLowerCase());
 }
 
 function populateIncomes(){
-    
+
     var incomesContent = '';
 
     var totalIncomeMonthly = 0;
     var totalIncomeYearly  = 0;
     var totalIncomeWeekly  = 0;
+
+    var taxRate = 0.3;
 
     $.getJSON( '/incomes/incomelist', function(income){
         incomesData = income;
@@ -231,6 +244,15 @@ function populateIncomes(){
         $('#totalIncomeWeekly').html(totalIncomeWeekly);
         $('#totalIncomeMonthly').html(totalIncomeMonthly);
         $('#totalIncomeYearly').html(totalIncomeYearly);
+
+        totalIncomeMonthlyAfterTax = parseInt(totalIncomeMonthly*(1-taxRate));
+
+        $('#totalIncomeWeeklyAfterTax').html(parseInt(totalIncomeWeekly*(1-taxRate)));
+        $('#totalIncomeMonthlyAfterTax').html(parseInt(totalIncomeMonthly*(1-taxRate)));
+        $('#totalIncomeYearlyAfterTax').html(parseInt(totalIncomeYearly*(1-taxRate)));
+
+    }).then(function(){
+        loadGraphs();
     });
 }
 
@@ -249,3 +271,63 @@ function deleteIncome(event){
         console.log('Error ajax : $o', response);
     });
 }
+
+function loadGraphs(){
+    
+    var barData = [];
+    var labels  = [];
+
+    var monthlyIncomeAfterTax = totalIncomeMonthlyAfterTax;
+    var monthlyExpenses = totalExpensesMonthly;
+
+    var leftOverMonthly = monthlyIncomeAfterTax - monthlyExpenses;
+
+    expensesData.forEach(function(expense){
+        var fee = 0;
+        if( expense.monthly != null)      fee = expense.monthly;
+        else if( expense.weekly != null ) fee = expense.weekly*52/12;
+        else if( expense.yearly != null ) fee = expense.yearly/12;
+        barData.push(fee);
+        labels.push(expense.name_of_expense);
+    });
+    console.log(barData);
+    if( leftOverMonthly < 0){
+        leftOverMonthly = 0;
+    }
+
+    pieData =   [
+                    {
+                        value : monthlyExpenses,
+                        label : "Expenses",
+                        color : "#F7464A"
+                    },
+                    {
+                        value : leftOverMonthly,
+                        label : "Left Over",
+                        color : "rgba(0,220,0,0.6)"
+                    }
+                ];
+
+    barData =   {
+                    labels : labels,
+                    datasets : [
+                        {
+                            label: "Expenses",
+                            fillColor: "rgba(220,220,220,0.6)",
+                            strokeColor: "rgba(220,220,220,0.8)",
+                            highlightFill: "rgba(220,220,220,0.75)",
+                            highlightStroke: "rgba(220,220,220,1)",
+                            data: barData
+                        }
+                    ]
+                };
+    if( $("#pieChart").length ){
+        var pieChart = $("#pieChart").get(0).getContext("2d");
+        myPieChart = new Chart(pieChart).Pie(pieData, { scaleFontColor: "#000" });
+    }
+    if($("#barChart").length ){
+        var barChart = $("#barChart").get(0).getContext("2d");
+        myBarChart = new Chart(barChart).Bar(barData, { scaleFontColor: "#000" });
+    }
+}
+

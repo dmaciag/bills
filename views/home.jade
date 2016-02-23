@@ -1,9 +1,71 @@
-html
-  head
-    title=title
-    link(href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
-  body
-    div.container
-      div.jumbotron
-        h1 Home!
-          p Home ptag
+extends layout
+block content
+    h1= title
+    #wrapper
+        div#expense-container
+            button#goToExpense Add Expense
+            button#goToIncome Add Income
+            script.
+                $('#goToIncome').on('click', goToIncome);
+                $('#goToExpense').on('click', goToExpense);
+            div#expenseList
+                table.table-bordered.expenses-table
+                    thead
+                        th Name
+                        th Company
+                        th Type
+                        th Monthly Cost
+                        th Day of Month
+                        th Delete
+                    tbody
+                    tfoot
+                        tr
+                            th(scope='row') Total Expense
+                                td 
+                                td
+                                td#totalFeeMonthly
+                                td
+                                td
+            script.
+                $('#expenseList table tbody').on('click', 'td a.deleteExpenseLink', deleteExpense);
+        div#incomeContainer
+            div#incomeList
+               table.table-bordered.incomes-table
+                    thead
+                        th Employee
+                        th Company
+                        th Title
+                        th Hours Per Week
+                        th Hourly Pay
+                        th Weekly Pay
+                        th Monthly Pay
+                        th Yearly Pay
+                        th Delete
+                    tbody
+                    tfoot
+                        tr
+                            th(scope='row') After Tax
+                                td
+                                td
+                                td
+                                td
+                                td#totalIncomeWeeklyAfterTax
+                                td#totalIncomeMonthlyAfterTax
+                                td#totalIncomeYearlyAfterTax
+                                td
+                    tfoot
+                        tr
+                            th(scope='row') Total Income
+                                td
+                                td
+                                td
+                                td
+                                td#totalIncomeWeekly
+                                td#totalIncomeMonthly
+                                td#totalIncomeYearly
+                                td
+            script.
+                $('#incomeList table tbody').on('click', 'td a.deleteIncomeLink', deleteIncome);
+        div#graphs
+            canvas#pieChart(width='204' height='205')
+            canvas#barChart(width='900' height='350')

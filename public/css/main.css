@@ -9,11 +9,38 @@
 #expense-container{
     position: relative;
     display: inline-block;
+    width: 100%;
 }
 
 .addIncome{
     left: 60px;
     position: relative;
+}
+
+#barChart{
+    position: relative;
+    left: 24px;
+}
+
+#pieChart{
+    position: relative;
+    top: -55px;
+}
+#goToIncome, #goToExpense{
+    background: #4B99AD;
+    padding: 8px 15px 8px 15px;
+    border: none;
+    color: #fff;
+}
+
+#goToIncome{
+    position: relative;
+    left: 2px;
+}
+
+#expenseList{
+    position: relative;
+    top: 7px;
 }
 /*
  The following block of form-style css was imported from sanwebe.com
@@ -36,6 +63,7 @@
     display:block;
     font-weight: bold;
 }
+
 .form-style-1 input[type=text], 
 .form-style-1 input[type=date],
 .form-style-1 input[type=datetime],
@@ -106,7 +134,7 @@ select{
 table {
     border-collapse:collapse;
     margin-bottom:15px;
-    width:90%;
+    width:100%;
 }
 
 table td,
