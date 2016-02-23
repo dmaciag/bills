@@ -26,16 +26,16 @@ block content
                         option(value='Monthly') Monthly
                         option(value='Yearly') Yearly
                         option(value='Weekly') Weekly
+                li#dayOfMonthLi
+                    label
+                        span.dayOfMonth Day of Month
+                    input#field5.dayOfMonth.field-short(type='text', name='day_of_month', placeholder='15')
                 li
                     label 
                         span.salaryTerm Monthly  
                         | Fee
                         span.required *
                     input#field5.salary.field-short(type='text', name='monthly', placeholder='350')
-                li#dayOfMonthLi
-                    label
-                        span.dayOfMonth Day of Month
-                    input#field5.dayOfMonth.field-short(type='text', name='day_of_month', placeholder='12')
                 li
                     input(type='submit', value='Submit')
     script.

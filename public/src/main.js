@@ -28,7 +28,8 @@ function populateExpenses(){
     $.getJSON( '/expenses/expenselist', function(expenses){
         expensesData = expenses;
         $.each(expenses, function(){
-
+            var dayOfMonth  = (this.day_of_month != null ) ? this.day_of_month : 'N/A';
+            var companyName = (this.company_name != null ) ? this.company_name : 'N/A';
             var monthlyCost = 0;
             if( this.pay_period == 'Monthly' )     monthlyCost = this.monthly;
             else if( this.pay_period == 'Weekly' ) monthlyCost = this.weekly*52/12;
@@ -38,10 +39,10 @@ function populateExpenses(){
             totalFeeMonthly += (parseFloat(this.fee) !== null) ? parseFloat(this.fee) : 0;
             expensesContent += '<tr>';
             expensesContent += '<td>' + this.name_of_expense + '</td>';
-            expensesContent += '<td>' + this.company_name + '</td>';
+            expensesContent += '<td>' + companyName + '</td>';
             expensesContent += '<td>' + this.pay_period + '</td>';
             expensesContent += '<td>' + parseInt(monthlyCost)  + '</td>';
-            expensesContent += '<td>' + 04 + '</td>';
+            expensesContent += '<td>' + dayOfMonth + '</td>';
             expensesContent += '<td>' + '<a href="#" class="deleteExpenseLink" rel="' + this._id + '">delete</a>' + '</td>';
             expensesContent += '<tr>';
 
@@ -156,22 +157,26 @@ function changeIncomeInputFields(){
     $('.salaryTerm').text($('.payPeriodSelect').val() + ' ');
     $('.salary').attr('placeholder', placeHolderSalary);
     $('.salary').attr('name', $('.payPeriodSelect').val().toLowerCase());
-
-    if( $('.payPeriodSelect').val() !='Monthly' && $('#dayOfMonthLi').length){
-        $('#dayOfMonthLi').remove();
-    }
 }
 
 function changeExpenseInputFields(){
+
     var placeHolderFee = 0;
     
-    if( $('.payPeriodSelect').val() == 'Weekly')   placeHolderFee = 40;
+    if( $('.payPeriodSelect').val() == 'Weekly')        placeHolderFee = 40;
     else if( $('.payPeriodSelect').val() == 'Monthly')  placeHolderFee = 350;
     else if( $('.payPeriodSelect').val() == 'Yearly' )  placeHolderFee = 2000;
 
     $('.salaryTerm').text($('.payPeriodSelect').val() + ' ');
     $('.salary').attr('placeholder', placeHolderFee);
     $('.salary').attr('name', $('.payPeriodSelect').val().toLowerCase());
+
+    if( $('.payPeriodSelect').val() != 'Monthly' && $('#dayOfMonthLi').length){
+        $('#dayOfMonthLi').remove();
+    }
+    else if( $('.payPeriodSelect').val() == 'Monthly'){
+        $(this).append('<li id="dayOfMonthLi"><label for="day_of_month">Day of Month</label><input id="dayOfMonth" class="field-short" type="text" placeholder="15" name="day_of_month"/></li>');
+    }
 }
 
 function populateIncomes(){
@@ -290,7 +295,7 @@ function loadGraphs(){
         barData.push(fee);
         labels.push(expense.name_of_expense);
     });
-    console.log(barData);
+
     if( leftOverMonthly < 0){
         leftOverMonthly = 0;
     }

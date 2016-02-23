@@ -182,3 +182,12 @@ tbody tr.odd td{
 body{
     background-image: linear-gradient(to left, rgb(192, 36, 37), rgb(240, 203, 53));
 }
+
+#wrapper{
+    position: relative;
+    top: 30px;
+}
+
+#expenseHead, #incomeHead{
+    text-align: center;
+}
