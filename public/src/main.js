@@ -54,6 +54,8 @@ function populateExpenses(){
 
         $('#expenseList table tbody').html(expensesContent);
         $('#totalFeeMonthly').html(totalMonthlyCost);
+    }).then(function(){       
+        loadGraphs();
     });
 }
 
@@ -330,7 +332,7 @@ function loadGraphs(){
         var pieChart = $("#pieChart").get(0).getContext("2d");
         myPieChart = new Chart(pieChart).Pie(pieData, { scaleFontColor: "#000" });
     }
-    if($("#barChart").length ){
+    if( $("#barChart").length ){
         var barChart = $("#barChart").get(0).getContext("2d");
         myBarChart = new Chart(barChart).Bar(barData, { scaleFontColor: "#000" });
     }
