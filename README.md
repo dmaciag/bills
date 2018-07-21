@@ -1,6 +1,6 @@
 # nBills
 
-This is a basic CMS to manage your income and expenses. Feel free to use it for any purposes, as long as your work is on a local environment.
+This is a basic application that helps view your income and expenses in relation to one another. Feel free to use it for any purposes, as long as your work is on a local environment.
 
 ![alt tag](https://github.com/dmaciag/nBills/blob/master/pic/example.png)
 
